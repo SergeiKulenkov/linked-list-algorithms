@@ -14,6 +14,8 @@ public:
 		static_assert(Numeric<T>, "only numbers are allowed.");
 	}
 
+	~ListNode() = default;
+
 	ListNode(T newValue) : value(newValue), next(nullptr)
 	{
 		static_assert(Numeric<T>, "only numbers are allowed.");
@@ -23,6 +25,8 @@ public:
 	{
 		static_assert(Numeric<T>, "only numbers are allowed.");
 	}
+
+	ListNode(ListNode* node) : value(node->GetValue()), next(node->GetNext()) {}
 
 	T GetValue() const { return value; }
 	ListNode* GetNext() const { return next; }
