@@ -20,10 +20,10 @@ void Print(std::vector<T> values)
 template<Numeric T>
 void CreateTestList(ListNode<T>** head)
 {
-	ListNode<int>* a = new ListNode(2);
-	ListNode<int>* b = new ListNode(3);
-	ListNode<int>* c = new ListNode(3);
-	ListNode<int>* d = new ListNode(5);
+	ListNode<uint16_t>* a = new ListNode((uint16_t)2);
+	ListNode<uint16_t>* b = new ListNode((uint16_t)3);
+	ListNode<uint16_t>* c = new ListNode((uint16_t)4);
+	ListNode<uint16_t>* d = new ListNode((uint16_t)5);
 
 	(*head)->SetNext(a);
 	a->SetNext(b);
@@ -31,10 +31,11 @@ void CreateTestList(ListNode<T>** head)
 	c->SetNext(d);
 }
 
-template<Numeric T>
+// destroy can work for any type
+template<typename T>
 void DestroyList(ListNode<T>** head)
 {
-	if (*head != nullptr)
+	if (head != nullptr && *head != nullptr)
 	{
 		ListNode<T>* current = *head;
 		ListNode<T>* next = nullptr;
@@ -53,7 +54,7 @@ void DestroyList(ListNode<T>** head)
 
 int main()
 {
-	ListNode<int>* head = new ListNode(1);
+	ListNode<uint16_t>* head = new ListNode((uint16_t)1);
 	CreateTestList(&head);
 
 	// testing
@@ -63,24 +64,45 @@ int main()
 
 	std::cout << "sum of all values = " << Algorithms::GetLinkedListSum(head) << '\n';
 
-	std::cout << "is 4 in the list - " << (Algorithms::IsValueInList(head, 4) ? "true" : "false") << '\n';
+	std::cout << "is 4 in the list - " << (Algorithms::IsValueInList(head, (uint16_t)4) ? "true" : "false") << '\n';
 
 	std::cout << "value at index 3 = " << Algorithms::GetValueAtIndex(head, 3) << '\n';
 
-	ListNode<int>* reversed = Algorithms::GetReversedLinkedList(head);
+	std::cout << "duplicate number is - " << Algorithms::FindDuplicate(head) << '\n';
+
+	ListNode<uint16_t>* reversed = Algorithms::GetReversedLinkedList(head);
+	std::cout << "\nreversed" << '\n';
 	Print(Algorithms::GetLinkedListValues(reversed));
 
 	// merging
-	ListNode<int>* list1 = new ListNode(0);
-	ListNode<int>* next1 = new ListNode(4);
-	ListNode<int>* next2 = new ListNode(7);
+	ListNode<uint16_t>* list1 = new ListNode((uint16_t)0);
+	ListNode<uint16_t>* next1 = new ListNode((uint16_t)4);
+	ListNode<uint16_t>* next2 = new ListNode((uint16_t)7);
 	list1->SetNext(next1);
 	next1->SetNext(next2);
 
-	ListNode<int>* merged = Algorithms::MergeLists(head, list1);
+	ListNode<uint16_t>* merged = Algorithms::MergeLists(head, list1);
+	std::cout << "\nmerged" << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
-	////
+	Algorithms::RemoveLast(merged);
+	std::cout << "\nremoved last" << '\n';
+	Print(Algorithms::GetLinkedListValues(merged));
+
+	Algorithms::RemoveFromEnd(&merged, 3);
+	std::cout << "\nremoved 3rd from end" << '\n';
+	Print(Algorithms::GetLinkedListValues(merged));
+
+	Algorithms::InsertNode(&merged, (uint16_t)6);
+	std::cout << "\ninserted last" << '\n';
+	Print(Algorithms::GetLinkedListValues(merged));
+
+	Algorithms::InsertNode(&merged, (uint16_t)0, 0);
+	std::cout << "\ninserted first" << '\n';
+	Print(Algorithms::GetLinkedListValues(merged));
+
+	DestroyList(&reversed);
 	DestroyList(&merged);
+
 	return 0;
 }
