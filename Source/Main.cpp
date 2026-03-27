@@ -22,13 +22,22 @@ void CreateTestList(ListNode<T>** head)
 {
 	ListNode<uint16_t>* a = new ListNode((uint16_t)2);
 	ListNode<uint16_t>* b = new ListNode((uint16_t)3);
-	ListNode<uint16_t>* c = new ListNode((uint16_t)4);
+	ListNode<uint16_t>* c = new ListNode((uint16_t)3);
 	ListNode<uint16_t>* d = new ListNode((uint16_t)5);
 
 	(*head)->SetNext(a);
 	a->SetNext(b);
 	b->SetNext(c);
 	c->SetNext(d);
+}
+
+template<Numeric T>
+void CreateTestList2(ListNode<T>** head)
+{
+	ListNode<uint16_t>* next1 = new ListNode((uint16_t)4);
+	ListNode<uint16_t>* next2 = new ListNode((uint16_t)7);
+	(*head)->SetNext(next1);
+	next1->SetNext(next2);
 }
 
 // destroy can work for any type
@@ -68,20 +77,29 @@ int main()
 
 	std::cout << "value at index 3 = " << Algorithms::GetValueAtIndex(head, 3) << '\n';
 
-	std::cout << "duplicate number is - " << Algorithms::FindDuplicate(head) << '\n';
+	uint16_t duplicate = 0;
+	if (Algorithms::FindDuplicate(head, duplicate))
+	{
+		std::cout << "duplicate number = " << duplicate << '\n';
+	}
+	else
+	{
+		std::cout << "duplicate number not found\n";
+	}
 
 	ListNode<uint16_t>* reversed = Algorithms::GetReversedLinkedList(head);
 	std::cout << "\nreversed" << '\n';
 	Print(Algorithms::GetLinkedListValues(reversed));
 
-	// merging
-	ListNode<uint16_t>* list1 = new ListNode((uint16_t)0);
-	ListNode<uint16_t>* next1 = new ListNode((uint16_t)4);
-	ListNode<uint16_t>* next2 = new ListNode((uint16_t)7);
-	list1->SetNext(next1);
-	next1->SetNext(next2);
+	ListNode<uint16_t>* partiallyReversed = Algorithms::GetPartiallyReversedLinkedList(head, 0, 2);
+	std::cout << "\npartially reversed" << '\n';
+	Print(Algorithms::GetLinkedListValues(partiallyReversed));
 
-	ListNode<uint16_t>* merged = Algorithms::MergeLists(head, list1);
+	// merging
+	ListNode<uint16_t>* list2 = new ListNode((uint16_t)0);
+	CreateTestList2(&list2);
+
+	ListNode<uint16_t>* merged = Algorithms::MergeLists(head, list2);
 	std::cout << "\nmerged" << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
@@ -101,7 +119,11 @@ int main()
 	std::cout << "\ninserted first" << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
+	std::cout << "\nmax value = " << Algorithms::FindMax(merged) << '\n';
+	std::cout << "min value = " << Algorithms::FindMin(merged) << '\n';
+
 	DestroyList(&reversed);
+	DestroyList(&partiallyReversed);
 	DestroyList(&merged);
 
 	return 0;

@@ -26,6 +26,29 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
+	ListNode<T>* CopyLinkedList(ListNode<T>* head)
+	{
+		ListNode<T>* result = new ListNode<T>();
+		if (head != nullptr)
+		{
+			ListNode<T>* current = result;
+			while (head != nullptr)
+			{
+				current->SetValue(head->GetValue());
+				if (head->GetNext() == nullptr)
+				{
+					break;
+				}
+				current->SetNext(new ListNode<T>());
+				current = current->GetNext();
+				head = head->GetNext();
+			}
+		}
+
+		return result;
+	}
+
+	template<Numeric T>
 	uint32_t CountElements(ListNode<T>* head)
 	{
 		uint32_t sum = 0;
@@ -52,7 +75,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	bool IsValueInList(ListNode<T>* head, T value)
+	bool IsValueInList(ListNode<T>* head, const T value)
 	{
 		bool present = false;
 		while (head != nullptr)
@@ -69,7 +92,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	T GetValueAtIndex(ListNode<T>* head, uint32_t index)
+	T GetValueAtIndex(ListNode<T>* head, const uint32_t index)
 	{
 		T value = 0;
 		uint32_t count = 0;
@@ -89,13 +112,13 @@ namespace Algorithms
 		return value;
 	}
 
-	// using a stack to preserve the original list
 	template<Numeric T>
 	ListNode<T>* GetReversedLinkedList(ListNode<T>* head)
 	{
 		ListNode<T>* reversed = head;
 		if (head != nullptr && head->GetNext() != nullptr)
 		{
+			// using a stack to preserve the original list
 			std::stack<int> order;
 			while (head->GetNext() != nullptr)
 			{
@@ -121,6 +144,47 @@ namespace Algorithms
 		}
 
 		return reversed;
+	}
+
+	// left and right are 0-based index values
+	template<Numeric T>
+	ListNode<T>* GetPartiallyReversedLinkedList(ListNode<T>* head, const uint32_t left, const uint32_t right)
+	{
+		assert(left <= right && "right must be greater than or equals to left");
+		ListNode<T>* result = new ListNode<T>();
+
+		if (head != nullptr && head->GetNext() != nullptr)
+		{
+			// need a copy as in the previous functiins, but in the original order
+			result = CopyLinkedList(head);
+			ListNode<T>* current = result;
+			ListNode<T>* leftPrevious = new ListNode<T>(0 ,result);
+
+			// reach node at index left
+			for (uint32_t i = 0; i < left; i++)
+			{
+				leftPrevious = current;
+				current = current->GetNext();
+			}
+
+			ListNode<T>* previous = nullptr;
+			ListNode<T>* next = nullptr;
+			// reverse nodes between left and right
+			// current = left, leftPrevious = before left
+			for (uint32_t i = 0; i < (right - left + 1); i++)
+			{
+				next = current->GetNext();
+				current->SetNext(previous);
+				previous = current;
+				current = next;
+			}
+
+			leftPrevious->GetNext()->SetNext(current); // current = after right
+			leftPrevious->SetNext(previous); // previous = right
+			result = leftPrevious->GetNext(); // left previous starts with a 0 node
+		}
+
+		return result;
 	}
 
 	template<Numeric T>
@@ -176,8 +240,9 @@ namespace Algorithms
 		}
 	}
 
+	// removes at position size - index
 	template<Numeric T>
-	void RemoveFromEnd(ListNode<T>** head, uint32_t index)
+	void RemoveFromEnd(ListNode<T>** head, const uint32_t index)
 	{
 		if (head != nullptr && *head != nullptr)
 		{
@@ -192,6 +257,7 @@ namespace Algorithms
 			assert(index <= size && "index out of bounds.");
 			if (size == index)
 			{
+				// remove the first node
 				ListNode<T>* save = *head;
 				*head = (*head)->GetNext();
 				delete save;
@@ -221,37 +287,32 @@ namespace Algorithms
 
 	// returns 0 if no duplicates found and prints a log message
 	template<Numeric T>
-	T FindDuplicate(ListNode<T>* head)
+	bool FindDuplicate(ListNode<T>* head, T& value)
 	{
-		T result = 0;
+		bool found = false;
 		if (head != nullptr)
 		{
 			std::set<T> unique;
-			uint32_t count = 0;
 			while (head != nullptr)
 			{
 				if (unique.find(head->GetValue()) != unique.end())
 				{
-					result = head->GetValue();
+					value = head->GetValue();
+					found = true;
 					break;
 				}
 
 				unique.emplace(head->GetValue());
 				head = head->GetNext();
-				count++;
-			}
-
-			if (unique.size() == count)
-			{
-				std::cout << "no duplicates found...";
 			}
 		}
 
-		return result;
+		return found;
 	}
 
+	// inserts at the end if no index is provided
 	template<Numeric T>
-	void InsertNode(ListNode<T>** head, ListNode<T>* newNode, int index = -1)
+	void InsertNode(ListNode<T>** head, ListNode<T>* newNode, const int index = -1)
 	{
 		if (head != nullptr && *head != nullptr)
 		{
@@ -277,8 +338,9 @@ namespace Algorithms
 		}
 	}
 
+	// inserts at the end if no index is provided
 	template<Numeric T>
-	void InsertNode(ListNode<T>** head, T value, int index = -1)
+	void InsertNode(ListNode<T>** head, T value, const int index = -1)
 	{
 		ListNode<T>* newNode = new ListNode(value);
 		InsertNode(head, newNode, index);
@@ -287,12 +349,32 @@ namespace Algorithms
 	template<Numeric T>
 	T FindMax(ListNode<T>* head)
 	{
+		T max = std::numeric_limits<T>::min();
+		while (head != nullptr)
+		{
+			if (head->GetValue() > max)
+			{
+				max = head->GetValue();
+			}
+			head = head->GetNext();
+		}
 
+		return max;
 	}
 
 	template<Numeric T>
 	T FindMin(ListNode<T>* head)
 	{
+		T min = std::numeric_limits<T>::max();
+		while (head != nullptr)
+		{
+			if (head->GetValue() < min)
+			{
+				min = head->GetValue();
+			}
+			head = head->GetNext();
+		}
 
+		return min;
 	}
 }

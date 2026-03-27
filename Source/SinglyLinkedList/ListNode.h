@@ -9,22 +9,13 @@ template<Numeric T>
 class ListNode
 {
 public:
-	ListNode() : value(0), next(nullptr)
-	{
-		static_assert(Numeric<T>, "only numbers are allowed.");
-	}
+	ListNode() : value(0), next(nullptr) {}
 
 	~ListNode() = default;
 
-	ListNode(T newValue) : value(newValue), next(nullptr)
-	{
-		static_assert(Numeric<T>, "only numbers are allowed.");
-	}
+	ListNode(T newValue) : value(newValue), next(nullptr) {}
 
-	ListNode(T newValue, ListNode* newNext) : value(newValue), next(newNext)
-	{
-		static_assert(Numeric<T>, "only numbers are allowed.");
-	}
+	ListNode(T newValue, ListNode* newNext) : value(newValue), next(newNext) {}
 
 	ListNode(ListNode* node) : value(node->GetValue()), next(node->GetNext()) {}
 
