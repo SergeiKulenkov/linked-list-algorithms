@@ -13,7 +13,7 @@
 namespace Algorithms
 {
 	template<Numeric T>
-	std::vector<T> GetLinkedListValues(ListNode<T>* head)
+	std::vector<T> GetLinkedListValues(const ListNode<T>* head)
 	{
 		std::vector<T> result;
 		while (head != nullptr)
@@ -26,7 +26,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	ListNode<T>* CopyLinkedList(ListNode<T>* head)
+	ListNode<T>* CopyLinkedList(const ListNode<T>* head)
 	{
 		ListNode<T>* result = new ListNode<T>();
 		if (head != nullptr)
@@ -49,7 +49,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	uint32_t CountElements(ListNode<T>* head)
+	uint32_t CountElements(const ListNode<T>* head)
 	{
 		uint32_t sum = 0;
 		while (head != nullptr)
@@ -62,7 +62,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	T GetLinkedListSum(ListNode<T>* head)
+	T GetLinkedListSum(const ListNode<T>* head)
 	{
 		T sum = 0;
 		while (head != nullptr)
@@ -75,7 +75,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	bool IsValueInList(ListNode<T>* head, const T value)
+	bool IsValueInList(const ListNode<T>* head, const T value)
 	{
 		bool present = false;
 		while (head != nullptr)
@@ -92,7 +92,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	T GetValueAtIndex(ListNode<T>* head, const uint32_t index)
+	T GetValueAtIndex(const ListNode<T>* head, const uint32_t index)
 	{
 		T value = 0;
 		uint32_t count = 0;
@@ -113,9 +113,9 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	ListNode<T>* GetReversedLinkedList(ListNode<T>* head)
+	ListNode<T>* GetReversedLinkedList(const ListNode<T>* head)
 	{
-		ListNode<T>* reversed = head;
+		ListNode<T>* reversed = nullptr;
 		if (head != nullptr && head->GetNext() != nullptr)
 		{
 			// using a stack to preserve the original list
@@ -148,7 +148,7 @@ namespace Algorithms
 
 	// left and right are 0-based index values
 	template<Numeric T>
-	ListNode<T>* GetPartiallyReversedLinkedList(ListNode<T>* head, const uint32_t left, const uint32_t right)
+	ListNode<T>* GetPartiallyReversedLinkedList(const ListNode<T>* head, const uint32_t left, const uint32_t right)
 	{
 		assert(left <= right && "right must be greater than or equals to left");
 		ListNode<T>* result = new ListNode<T>();
@@ -285,9 +285,8 @@ namespace Algorithms
 		}
 	}
 
-	// returns 0 if no duplicates found and prints a log message
 	template<Numeric T>
-	bool FindDuplicate(ListNode<T>* head, T& value)
+	bool FindDuplicate(const ListNode<T>* head, T& value)
 	{
 		bool found = false;
 		if (head != nullptr)
@@ -340,14 +339,14 @@ namespace Algorithms
 
 	// inserts at the end if no index is provided
 	template<Numeric T>
-	void InsertNode(ListNode<T>** head, T value, const int index = -1)
+	void InsertNode(ListNode<T>** head, const T value, const int index = -1)
 	{
 		ListNode<T>* newNode = new ListNode(value);
 		InsertNode(head, newNode, index);
 	}
 
 	template<Numeric T>
-	T FindMax(ListNode<T>* head)
+	T FindMax(const ListNode<T>* head)
 	{
 		T max = std::numeric_limits<T>::min();
 		while (head != nullptr)
@@ -363,7 +362,7 @@ namespace Algorithms
 	}
 
 	template<Numeric T>
-	T FindMin(ListNode<T>* head)
+	T FindMin(const ListNode<T>* head)
 	{
 		T min = std::numeric_limits<T>::max();
 		while (head != nullptr)

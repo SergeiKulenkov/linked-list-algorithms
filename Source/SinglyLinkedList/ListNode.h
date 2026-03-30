@@ -22,7 +22,7 @@ public:
 	T GetValue() const { return value; }
 	ListNode* GetNext() const { return next; }
 
-	void SetValue(T newValue) { value = newValue; }
+	void SetValue(const T newValue) { value = newValue; }
 	void SetNext(ListNode* newNext) { next = newNext; }
 
 private:

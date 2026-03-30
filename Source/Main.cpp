@@ -9,7 +9,7 @@ template<Numeric T>
 void Print(std::vector<T> values)
 {
 	std::cout << "Printing - ";
-	for (T value : values)
+	for (const T value : values)
 	{
 		std::cout << value << " ";
 	}
@@ -73,9 +73,11 @@ int main()
 
 	std::cout << "sum of all values = " << Algorithms::GetLinkedListSum(head) << '\n';
 
-	std::cout << "is 4 in the list - " << (Algorithms::IsValueInList(head, (uint16_t)4) ? "true" : "false") << '\n';
+	const uint16_t valueToFinde = 4;
+	std::cout << valueToFinde << " in the list - " << (Algorithms::IsValueInList(head, valueToFinde) ? "true" : "false") << '\n';
 
-	std::cout << "value at index 3 = " << Algorithms::GetValueAtIndex(head, 3) << '\n';
+	const uint32_t indexToCheck = 3;
+	std::cout << "value at index " << indexToCheck << " = " << Algorithms::GetValueAtIndex(head, indexToCheck) << '\n';
 
 	uint16_t duplicate = 0;
 	if (Algorithms::FindDuplicate(head, duplicate))
@@ -91,8 +93,10 @@ int main()
 	std::cout << "\nreversed" << '\n';
 	Print(Algorithms::GetLinkedListValues(reversed));
 
-	ListNode<uint16_t>* partiallyReversed = Algorithms::GetPartiallyReversedLinkedList(head, 0, 2);
-	std::cout << "\npartially reversed" << '\n';
+	const uint32_t leftIndex = 0;
+	const uint32_t rightIndex = 2;
+	ListNode<uint16_t>* partiallyReversed = Algorithms::GetPartiallyReversedLinkedList(head, leftIndex, rightIndex);
+	std::cout << "\npartially reversed between indexes " << leftIndex << " and " << rightIndex << '\n';
 	Print(Algorithms::GetLinkedListValues(partiallyReversed));
 
 	// merging
@@ -107,16 +111,20 @@ int main()
 	std::cout << "\nremoved last" << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
-	Algorithms::RemoveFromEnd(&merged, 3);
-	std::cout << "\nremoved 3rd from end" << '\n';
+	const uint32_t indexFromEnd = 3;
+	Algorithms::RemoveFromEnd(&merged, indexFromEnd);
+	std::cout << "\nremoved number " << indexFromEnd << " from end" << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
-	Algorithms::InsertNode(&merged, (uint16_t)6);
-	std::cout << "\ninserted last" << '\n';
+	const uint16_t nodeValue = 6;
+	Algorithms::InsertNode(&merged, nodeValue);
+	std::cout << "\ninserted " << nodeValue << " at the end" << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
-	Algorithms::InsertNode(&merged, (uint16_t)0, 0);
-	std::cout << "\ninserted first" << '\n';
+	const uint16_t nodeValue2 = 0;
+	const int newNodeIndex = 0;
+	Algorithms::InsertNode(&merged, nodeValue2, newNodeIndex);
+	std::cout << "\ninserted " << nodeValue2 << " at index " << newNodeIndex << '\n';
 	Print(Algorithms::GetLinkedListValues(merged));
 
 	std::cout << "\nmax value = " << Algorithms::FindMax(merged) << '\n';
