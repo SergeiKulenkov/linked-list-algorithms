@@ -16,3 +16,8 @@
 * void InsertNode(ListNode<T>** head, ListNode<T>* newNode, const int index = -1) / void InsertNode(ListNode<T>** head, const T value, const int index = -1) - <ins>inserts a new</ins> node at the end or at index
 * T FindMax(const ListNode<T>* head)
 * T FindMin(const ListNode<T>* head)
+* ListNode<T>* SplitLinkedList(ListNode<T>* head) - <ins>helper function for</ins> merge sort, returns second half of the list, head becomes the first half
+* ListNode<T>* MergeSort(ListNode<T>* head) - <ins>recursively sorts the</ins> list and returns the sorted version
+* ListNode<T>* SortLinkedList(const ListNode<T>* head) - <ins>uses the above</ins> merge sort, but before that makes a copy of the provided list
+* bool IsSameList(const ListNode<T>* list1, const ListNode<T>* list2)
+* bool HasCycle(const ListNode<T>* head)

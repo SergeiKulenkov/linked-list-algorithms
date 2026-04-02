@@ -191,31 +191,36 @@ namespace Algorithms
 	ListNode<T>* MergeLists(ListNode<T>* list1, ListNode<T>* list2)
 	{
 		ListNode<T>* result = new ListNode<T>();
-		ListNode<T>* tail = result;
-
-		while (list1 != nullptr && list2 != nullptr)
+		if (list1 != nullptr && list2 != nullptr)
 		{
-			if (list1->GetValue() < list2->GetValue())
+			ListNode<T>* tail = result;
+			ListNode<T>* list1Copy = CopyLinkedList(list1);
+			ListNode<T>* list2Copy = CopyLinkedList(list2);
+
+			while (list1Copy != nullptr && list2Copy != nullptr)
 			{
-				tail->SetNext(list1);
-				list1 = list1->GetNext();
+				if (list1Copy->GetValue() < list2Copy->GetValue())
+				{
+					tail->SetNext(list1Copy);
+					list1Copy = list1Copy->GetNext();
+				}
+				else
+				{
+					tail->SetNext(list2Copy);
+					list2Copy = list2Copy->GetNext();
+				}
+
+				tail = tail->GetNext();
 			}
-			else
+
+			if (list1Copy != nullptr)
 			{
-				tail->SetNext(list2);
-				list2 = list2->GetNext();
+				tail->SetNext(list1Copy);
 			}
-
-			tail = tail->GetNext();
-		}
-
-		if (list1 != nullptr)
-		{
-			tail->SetNext(list1);
-		}
-		else if (list2 != nullptr)
-		{
-			tail->SetNext(list2);
+			else if (list2Copy != nullptr)
+			{
+				tail->SetNext(list2Copy);
+			}
 		}
 
 		return result->GetNext();
@@ -375,5 +380,119 @@ namespace Algorithms
 		}
 
 		return min;
+	}
+
+	// head becomes the first half
+	template<Numeric T>
+	ListNode<T>* SplitLinkedList(ListNode<T>* head)
+	{
+		ListNode<T>* secondHalf = nullptr;
+		if (head != nullptr)
+		{
+			ListNode<T>* fast = head;
+			ListNode<T>* slow = head;
+
+			while (fast != nullptr && fast->GetNext() != nullptr)
+			{
+				fast = fast->GetNext()->GetNext();
+				if (fast != nullptr)
+				{
+					slow = slow->GetNext();
+				}
+			}
+
+			secondHalf = slow->GetNext();
+			slow->SetNext(nullptr);
+		}
+
+		return secondHalf;
+	}
+
+	// recursively split the list into halves, then merge them back in a sorted order
+	template<Numeric T>
+	ListNode<T>* MergeSort(ListNode<T>* head)
+	{
+		ListNode<T>* result = nullptr;
+		if (head == nullptr || head->GetNext() == nullptr)
+		{
+			result = head;
+		}
+		else
+		{
+			result = head;
+			ListNode<T>* secondHalf = SplitLinkedList(result);
+			result = MergeSort(result);
+			secondHalf = MergeSort(secondHalf);
+			result = MergeLists(result, secondHalf);
+		}
+
+		return result;
+	}
+
+	// using merge sort
+	template<Numeric T>
+	ListNode<T>* SortLinkedList(const ListNode<T>* head)
+	{
+		ListNode<T>* result = nullptr;
+		if (head != nullptr)
+		{
+			result = CopyLinkedList(head);
+			result = MergeSort(result);
+		}
+
+		return result;
+	}
+
+	template<Numeric T>
+	bool IsSameList(const ListNode<T>* list1, const ListNode<T>* list2)
+	{
+		bool same = true;
+		if (list1 != nullptr && list2 != nullptr)
+		{
+			while (list1 != nullptr && list2 != nullptr)
+			{
+				if (list1->GetValue() != list2->GetValue())
+				{
+					same = false;
+					break;
+				}
+
+				list1 = list1->GetNext();
+				list2 = list2->GetNext();
+			}
+
+			if ((list1 != nullptr && list2 == nullptr) ||
+				(list1 == nullptr && list2 != nullptr))
+			{
+				same = false;
+			}
+		}
+
+		return same;
+	}
+
+	template<Numeric T>
+	bool HasCycle(const ListNode<T>* head)
+	{
+		bool cycle = false;
+		if (head != nullptr)
+		{
+			const ListNode<T>* slow = head;
+			const ListNode<T>* fast = head;
+
+			while (fast != nullptr && fast->GetNext() != nullptr)
+			{
+				slow = slow->GetNext();
+				fast = fast->GetNext()->GetNext();
+
+				if (fast == slow)
+				{
+					cycle = true;
+					break;
+				}
+			}
+		}
+
+		return cycle;
 	}
 }

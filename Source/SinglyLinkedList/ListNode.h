@@ -9,15 +9,21 @@ template<Numeric T>
 class ListNode
 {
 public:
-	ListNode() : value(0), next(nullptr) {}
-
+	ListNode() = default;
 	~ListNode() = default;
 
-	ListNode(T newValue) : value(newValue), next(nullptr) {}
+	explicit ListNode(const T newValue) : value(newValue) {}
 
-	ListNode(T newValue, ListNode* newNext) : value(newValue), next(newNext) {}
+	explicit ListNode(const ListNode* node)
+	{
+		if (node != nullptr)
+		{
+			value = node->GetValue();
+			next = new ListNode(node->GetNext());
+		}
+	}
 
-	ListNode(ListNode* node) : value(node->GetValue()), next(node->GetNext()) {}
+	ListNode(const T newValue, ListNode* newNext) : value(newValue), next(newNext) {}
 
 	T GetValue() const { return value; }
 	ListNode* GetNext() const { return next; }
@@ -26,6 +32,6 @@ public:
 	void SetNext(ListNode* newNext) { next = newNext; }
 
 private:
-	T value;
-	class ListNode* next;
+	T value = 0;
+	class ListNode* next = nullptr;
 };
